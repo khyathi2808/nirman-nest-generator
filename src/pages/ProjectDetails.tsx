@@ -4,10 +4,31 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, MapPin, Calendar, Building, Users, CheckCircle, Home, Ruler, IndianRupee } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
+import { useToast } from "@/hooks/use-toast";
 
 const ProjectDetails = () => {
   const { projectName } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleDownloadBrochure = () => {
+    toast({
+      title: "Brochure Download Started",
+      description: "Your project brochure is being downloaded.",
+    });
+    // Simulate download
+    const link = document.createElement('a');
+    link.href = '#';
+    link.download = `${project?.name || 'project'}-brochure.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleCallNow = () => {
+    window.open('tel:+919876543210', '_self');
+  };
 
   // Project data - in a real app, this would come from an API
   const projects = [
@@ -213,10 +234,37 @@ const ProjectDetails = () => {
                     </div>
 
                     <div className="space-y-3">
-                      <Button variant="hero" className="w-full">
+                      <Button 
+                        variant="hero" 
+                        className="w-full"
+                        onClick={() => {
+                          const floorPlanElement = document.createElement('div');
+                          floorPlanElement.innerHTML = `
+                            <div style="padding: 20px; text-align: center;">
+                              <h2>Floor Plan - ${unit.type}</h2>
+                              <p>Area: ${unit.area_sqft} sq ft</p>
+                              <p>Price: ${unit.price}</p>
+                              <p>Detailed floor plan will be displayed here</p>
+                            </div>
+                          `;
+                          const newWindow = window.open('', '_blank', 'width=800,height=600');
+                          if (newWindow) {
+                            newWindow.document.write(floorPlanElement.innerHTML);
+                          }
+                        }}
+                      >
                         View Floor Plan
                       </Button>
-                      <Button variant="outline" className="w-full">
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => {
+                          const element = document.getElementById('contact');
+                          if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                          }
+                        }}
+                      >
                         Schedule Site Visit
                       </Button>
                     </div>
@@ -273,10 +321,19 @@ const ProjectDetails = () => {
               Contact our sales team for more information and to schedule a visit
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="hero" size="lg">
+              <Button 
+                variant="hero" 
+                size="lg"
+                onClick={handleDownloadBrochure}
+              >
                 Download Brochure
               </Button>
-              <Button variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                onClick={handleCallNow}
+              >
                 Call Now: +91 98765 43210
               </Button>
             </div>
@@ -284,6 +341,7 @@ const ProjectDetails = () => {
         </section>
       </main>
 
+      <ContactSection />
       <Footer />
     </div>
   );

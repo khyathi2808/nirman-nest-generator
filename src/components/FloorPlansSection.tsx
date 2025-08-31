@@ -2,8 +2,56 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Home, Maximize, IndianRupee, Download, Eye } from "lucide-react";
 import floorPlanImage from "@/assets/floor-plan-sample.jpg";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const FloorPlansSection = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  const handleViewDetails = (plan: any) => {
+    navigate(`/project/ayra-nirman-heights`);
+  };
+
+  const handleDownloadBrochure = () => {
+    toast({
+      title: "Brochure Download Started",
+      description: "Your detailed floor plan brochure is being downloaded.",
+    });
+    // Simulate download
+    const link = document.createElement('a');
+    link.href = '#';
+    link.download = 'ayra-nirman-floor-plans.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleScheduleVisit = () => {
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    toast({
+      title: "Redirecting to Contact Form",
+      description: "Please fill out the form below to schedule your site visit.",
+    });
+  };
+
+  const handleGetPriceList = () => {
+    toast({
+      title: "Price List Download",
+      description: "Latest price list and offers are being downloaded.",
+    });
+    // Simulate download
+    const link = document.createElement('a');
+    link.href = '#';
+    link.download = 'ayra-nirman-price-list.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const floorPlans = [
     {
       type: "1 BHK",
@@ -101,11 +149,19 @@ const FloorPlansSection = () => {
 
                 {/* Buttons */}
                 <div className="space-y-3">
-                  <Button variant={plan.popular ? "hero" : "default"} className="w-full">
+                  <Button 
+                    variant={plan.popular ? "hero" : "default"} 
+                    className="w-full"
+                    onClick={() => handleViewDetails(plan)}
+                  >
                     <Eye className="w-4 h-4" />
                     View Details
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={handleDownloadBrochure}
+                  >
                     <Download className="w-4 h-4" />
                     Download Brochure
                   </Button>
@@ -153,10 +209,18 @@ const FloorPlansSection = () => {
           <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Find Your Perfect Home?</h3>
           <p className="text-muted-foreground mb-6">Schedule a site visit to experience the quality and craftsmanship firsthand</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="hero" size="lg">
+            <Button 
+              variant="hero" 
+              size="lg"
+              onClick={handleScheduleVisit}
+            >
               Schedule Site Visit
             </Button>
-            <Button variant="outline" size="lg">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={handleGetPriceList}
+            >
               Get Price List
             </Button>
           </div>

@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Calendar, Building, Users, CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const PropertiesSection = () => {
+  const navigate = useNavigate();
   const properties = [
     {
       name: "Ayra Nirman Heights",
@@ -150,7 +152,11 @@ const PropertiesSection = () => {
 
                 {/* Actions */}
                 <div className="flex gap-3">
-                  <Button variant="hero" className="flex-1">
+                  <Button 
+                    variant="hero" 
+                    className="flex-1"
+                    onClick={() => navigate(`/project/${property.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                  >
                     View Details
                   </Button>
                   <Button variant="outline" className="flex-1">
